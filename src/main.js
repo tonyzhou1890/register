@@ -3,6 +3,11 @@ import App from './App.vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
+import store from './store'
+import router from './router'
+
+import './icons' // icon
+import './permission' // permission control
 
 Vue.use(Vuetify, {
   theme: {
@@ -17,5 +22,7 @@ Vue.use(Vuetify, {
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')
