@@ -10,7 +10,9 @@ module.exports = {
     es6: true,
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
-
+  plugins: [
+    'vue'
+  ],
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
@@ -123,7 +125,6 @@ module.exports = {
     'no-proto': 2,
     'no-redeclare': 2,
     'no-regex-spaces': 2,
-    'no-return-assign': [2, 'except-parens'],
     'no-self-assign': 2,
     'no-self-compare': 2,
     'no-sequences': 2,

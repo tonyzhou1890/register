@@ -1,19 +1,28 @@
 <template>
   <div id="app">
     <v-app>
-      <img alt="Vue logo" src="./assets/logo.png">
-      <HelloWorld msg="Welcome to Your Vue.js App" />
+      <v-snackbar
+        v-model="showNotify"
+        :top="true"
+        :color="$store.state.app.notifyColor"
+      >{{ $store.state.app.notifyInfo }}</v-snackbar>
+      <router-view />
     </v-app>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  computed: {
+    showNotify: {
+      get() {
+        return this.$store.state.app.notify
+      },
+      set(value) {
+        this.$store.commit('app/TOGGLE_NOTIFY', { info: '', show: value })
+      }
+    }
   }
 }
 </script>
@@ -25,6 +34,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

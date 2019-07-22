@@ -3,28 +3,26 @@ import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
-import getPageTitle from '@/utils/get-page-title'
+import { urlToken } from '@/utils/url'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
+const whiteList = ['/', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 
-  // set page title
-  document.title = getPageTitle(to.meta.title)
-
   // determine whether the user has logged in
-  const hasToken = getToken()
+  const hasToken = getToken() || urlToken()
 
   if (hasToken) {
-    if (to.path === '/login') {
+    if (to.path === '/') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({ path: '/profile' })
       NProgress.done()
     } else {
+      console.log(store)
       // determine whether the user has obtained his permission roles through getInfo
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (hasRoles) {
@@ -47,8 +45,8 @@ router.beforeEach(async(to, from, next) => {
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
-          Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
+          store.commit('app/TOGGLE_NOTIFY', { info: '获取账户信息失败', show: true })
+          next(`/?redirect=${to.path}`)
           NProgress.done()
         }
       }
@@ -61,7 +59,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      next(`/?redirect=${to.path}`)
       NProgress.done()
     }
   }

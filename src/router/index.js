@@ -3,15 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-/* Layout */
-import Layout from '@/layout'
-
-/* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
-
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -38,17 +29,9 @@ import nestedRouter from './modules/nested'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [{
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: '/redirect/:path*',
-      component: () => import('@/views/redirect/index')
-    }]
-  },
+export const constantRoutes = [
   {
-    path: '/login',
+    path: '/',
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -63,10 +46,10 @@ export const constantRoutes = [{
     hidden: true
   },
   {
-    path: '/',
+    path: '/profile',
     component: () => import('@/views/dashboard/index'),
-    name: 'Dashboard',
-  },
+    name: 'Dashboard'
+  }
 ]
 
 /**

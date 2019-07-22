@@ -1,89 +1,70 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
+    <div class="box-container" :style="{transform: `rotateY(${rotate}deg)`}">
+      <div class="login-box">
+        <Title
+          :title="titles.forward.title"
+          :left="titles.forward.left"
+          :right="titles.forward.right"
+          @rotate="handleRotate"
         />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
+        <LoginBox />
       </div>
-    </el-form>
-
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
+      <div class="register-box">
+        <Title
+          :title="titles.right.title"
+          :left="titles.right.left"
+          :right="titles.right.right"
+          @rotate="handleRotate"
+        />
+        <Register @toLogin="toLogin" />
+      </div>
+      <div class="forget-box">
+        <Title
+          :title="titles.back.title"
+          :left="titles.back.left"
+          :right="titles.back.right"
+          @rotate="handleRotate"
+        />
+        <Forget />
+      </div>
+      <div class="about-box">
+        <Title
+          :title="titles.left.title"
+          :left="titles.left.left"
+          :right="titles.left.right"
+          @rotate="handleRotate"
+        />
+        <About />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
+import Title from './components/title'
+import LoginBox from './components/login'
+import Register from './components/register'
+import Forget from './components/forget'
+import About from './components/about'
 
+const login = '登录'
+const register = '注册'
+const forget = '忘记密码'
+const about = '关于'
 export default {
   name: 'Login',
-  components: { SocialSign },
+  components: {
+    Title,
+    LoginBox,
+    Register,
+    Forget,
+    About
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!String(value)) {
+        callback(new Error('请输入用户名'))
       } else {
         callback()
       }
@@ -96,9 +77,62 @@ export default {
       }
     }
     return {
+      index: 0,
+      // 标题组件需要的数据
+      // 本来是准备根据key旋转盒子的，后来想想还是根据方向旋转好了
+      titles: {
+        // 正面
+        forward: {
+          title: login,
+          left: {
+            key: -1,
+            label: about
+          },
+          right: {
+            key: 1,
+            label: register
+          }
+        },
+        // 左侧
+        left: {
+          title: about,
+          left: {
+            key: -2,
+            label: forget
+          },
+          right: {
+            key: 0,
+            label: login
+          }
+        },
+        // 右侧
+        right: {
+          title: register,
+          left: {
+            key: 0,
+            label: login
+          },
+          right: {
+            key: 2,
+            label: forget
+          }
+        },
+        //  后面
+        back: {
+          title: forget,
+          left: {
+            key: 1,
+            label: register
+          },
+          right: {
+            key: -1,
+            label: about
+          }
+        }
+      },
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -111,6 +145,14 @@ export default {
       redirect: undefined,
       otherQuery: {}
     }
+  },
+  computed: {
+    rotate() {
+      return 90 * this.index
+    }
+  },
+  metaInfo: {
+    title: '登录中心'
   },
   watch: {
     $route: {
@@ -128,11 +170,11 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
-    }
+    // if (this.loginForm.username === '') {
+    //   this.$refs.username.focus()
+    // } else if (this.loginForm.password === '') {
+    //   this.$refs.password.focus()
+    // }
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
@@ -185,147 +227,63 @@ export default {
         }
         return acc
       }, {})
+    },
+    // 点击标题左右
+    handleRotate(direction, key, raw) {
+      this.index = direction === 'left' ? this.index + 1 : this.index - 1
+    },
+    // 回到登录面
+    toLogin() {
+      this.index = this.index < 0 ? Math.ceil(this.index / 4) * 4 : Math.floor(this.index / 4) * 4
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
 
-<style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+<style lang="less" scoped>
+@import url('~@/style/variables.less');
+@bg:#96a5b9;
+@dark_gray:#889aa4;
+@light_gray:#eee;
 
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  background-color: @bg;
   overflow: hidden;
+  perspective: 1000px;
 
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
-
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+  .box-container {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-in;
+    > div {
+      position: absolute;
+      width: 300px;
+      height: 450px;
+      left: -150px;
+      top: -225px;
+      color: @primary;
+      background-color: rgba(255, 255, 255, 0.96);
+      box-sizing: border-box;
+      border: 4px solid @primary;
+      border-radius: 3px;
+      &.login-box {
+        transform: translateZ(150px);
       }
-    }
-  }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
-
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
-    }
-  }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
-
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
+      &.forget-box {
+        transform: rotateY(-180deg) translateZ(150px);
+      }
+      &.register-box {
+        transform: rotateY(90deg) translateZ(150px);
+      }
+      &.about-box {
+        transform: rotateY(-90deg) translateZ(150px);
+      }
     }
   }
 }

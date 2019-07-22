@@ -5,6 +5,9 @@ import 'vuetify/dist/vuetify.min.css'
 import zhHans from 'vuetify/es5/locale/zh-Hans'
 import store from './store'
 import router from './router'
+import meta from 'vue-meta'
+
+import './style/index.less'
 
 import './icons' // icon
 import './permission' // permission control
@@ -18,6 +21,8 @@ Vue.use(Vuetify, {
     current: 'zhHans'
   }
 })
+
+Vue.use(meta)
 
 Vue.config.productionTip = false
 

@@ -6,7 +6,10 @@ const state = {
     withoutAnimation: false
   },
   device: 'desktop',
-  size: Cookies.get('size') || 'medium'
+  size: Cookies.get('size') || 'medium',
+  notify: false,
+  notifyInfo: '',
+  notifyColor: 'info'
 }
 
 const mutations = {
@@ -30,6 +33,14 @@ const mutations = {
   SET_SIZE: (state, size) => {
     state.size = size
     Cookies.set('size', size)
+  },
+  // 切换全局通知状态
+  TOGGLE_NOTIFY: (state, data) => {
+    if (typeof data === 'object') {
+      state.notifyInfo = data.info
+      state.notify = data.show
+      state.notifyColor = data.color || state.notifyColor
+    }
   }
 }
 

@@ -26,7 +26,7 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: undefined,
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -34,7 +34,8 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    }
+    },
+    proxy: 'http://localhost:4000'
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
