@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="title-row">
     <span
       class="left link"
     >
@@ -61,7 +61,7 @@ export default {
 
 <style lang="less" scoped>
 @import url('~@/style/variables.less');
-.row {
+.title-row {
   width: 100%;
   height: 60px;
   padding: 10px;

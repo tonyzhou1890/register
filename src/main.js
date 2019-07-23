@@ -12,7 +12,17 @@ import './style/index.less'
 import './icons' // icon
 import './permission' // permission control
 
-Vue.use(Vuetify, {
+// Vue.use(Vuetify, {
+//   theme: {
+//     primary: '#9C27B0'
+//   },
+//   lang: {
+//     locales: { zhHans },
+//     current: 'zhHans'
+//   }
+// })
+
+const vuetifyOptions = {
   theme: {
     primary: '#9C27B0'
   },
@@ -20,7 +30,8 @@ Vue.use(Vuetify, {
     locales: { zhHans },
     current: 'zhHans'
   }
-})
+}
+Vue.use(Vuetify)
 
 Vue.use(meta)
 
@@ -29,5 +40,6 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  vuetify: new Vuetify(vuetifyOptions),
   render: h => h(App)
 }).$mount('#app')
