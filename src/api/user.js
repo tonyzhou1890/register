@@ -30,3 +30,21 @@ export function register(data) {
     data
   })
 }
+
+// 更新
+export function update(data) {
+  return request({
+    url: '/register/account/update',
+    method: 'post',
+    data
+  })
+}
+
+// 更新订阅应用
+export function updateApps(data) {
+  return request({
+    url: '/register/account/updateApps',
+    method: 'post',
+    data
+  })
+}

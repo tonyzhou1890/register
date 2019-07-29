@@ -57,6 +57,14 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  {
+    path: '/apps',
+    component: () => import('@/views/apps/index'),
+    name: 'Apps',
+    meta: {
+      roles: ['admin']
+    }
+  },
   // 404 page must be placed at the end !!!
   {
     path: '*',

@@ -7,6 +7,7 @@ const state = {
   },
   device: 'desktop',
   size: Cookies.get('size') || 'medium',
+  defaultAppIcon: process.env.VUE_APP_STORE + '/images/apps/default.png',
   notify: false,
   notifyInfo: '',
   notifyColor: 'info'
@@ -40,6 +41,7 @@ const mutations = {
       state.notifyInfo = data.info
       state.notify = data.show
       state.notifyColor = data.color || state.notifyColor
+      state.notifyTimeout = data.timeout || 6000
     }
   }
 }

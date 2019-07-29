@@ -5,6 +5,7 @@
         v-model="showNotify"
         :top="true"
         :color="$store.state.app.notifyColor"
+        :timeout="$store.state.app.notifyTimeout"
       >{{ $store.state.app.notifyInfo }}</v-snackbar>
       <router-view />
     </v-app>
@@ -32,7 +33,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 </style>

@@ -252,6 +252,7 @@ export default {
   background-color: @bg;
   overflow: hidden;
   perspective: 1000px;
+  text-align: center;
 
   .box-container {
     width: 0;

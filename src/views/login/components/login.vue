@@ -11,6 +11,7 @@
       label="用户名"
       class="user-name"
       required
+      @keyup.enter="handleLogin"
     />
     <v-text-field
       v-model="form.pwd"
@@ -19,6 +20,7 @@
       label="密码"
       class="pwd"
       required
+      @keyup.enter="handleLogin"
     />
     <v-btn
       class="submit"
