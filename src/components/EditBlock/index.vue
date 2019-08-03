@@ -8,22 +8,68 @@
     @mouseleave="onMouseleave"
   >
     <slot />
+    <!-- svg 按钮 -->
+    <!-- 编辑 -->
     <svg-icon
+      v-if="buttonType === 'svg'"
       @click.native="onClick('edit')"
       v-show="edit"
       class="edit"
       :style="`border-color: ${color}; color: ${color}; background: ${background}`"
       icon-class="edit" />
+    <!-- 完成 -->
     <svg-icon
+      v-if="buttonType === 'svg'"
       @click.native="onClick('done')"
-      v-show="right" class="right"
+      v-show="right"
+      class="right"
       :style="`border-color: ${color}; color: ${color}; background: ${background}`"
       icon-class="right" />
+    <!-- 取消 -->
     <svg-icon
+      v-if="buttonType === 'svg'"
       @click.native="onClick('cancel')"
-      v-show="cancel" class="cancel"
+      v-show="cancel"
+      class="cancel"
       :style="`border-color: ${color}; color: ${color}; background: ${background}`"
       icon-class="cancel" />
+    <!-- button 按钮 -->
+    <!-- 编辑 -->
+    <v-btn 
+      v-if="buttonType === 'btn' || buttonType === 'button'"
+      @click.native="onClick('edit')"
+      v-show="edit"
+      class="edit"
+      small
+      tile
+      outlined
+      :style="`border-color: ${color}; color: ${color}; background: ${background}`" >
+      <v-icon>edit</v-icon>
+    </v-btn>
+    <!-- 完成 -->
+    <v-btn 
+      v-if="buttonType === 'btn' || buttonType === 'button'"
+      @click.native="onClick('done')"
+      v-show="right"
+      class="right"
+      small
+      tile
+      outlined
+      :style="`border-color: ${color}; color: ${color}; background: ${background}`" >
+      <v-icon>done</v-icon>
+    </v-btn>
+    <!-- 取消 -->
+    <v-btn 
+      v-if="buttonType === 'btn' || buttonType === 'button'"
+      @click.native="onClick('cancel')"
+      v-show="cancel"
+      class="cancel btn"
+      small
+      tile
+      outlined
+      :style="`border-color: ${color}; color: ${color}; background: ${background}`" >
+      <v-icon>clear</v-icon>
+    </v-btn>
     <v-progress-circular
       v-if="loading"
       indeterminate
@@ -38,6 +84,10 @@ import { primary, background } from '@/style/variables.less'
 export default {
   name: 'EditBlock',
   props: {
+    buttonType: {
+      type: String,
+      default: 'svg'
+    },
     loading: {
       type: Boolean,
       default: false
@@ -115,8 +165,15 @@ export default {
   .edit {
     border: 0;
   }
+  .right, .cancel {
+    border-top: 0px;
+    border-right: 0px;
+  }
   .cancel {
-    right: 16px;
+    right: 22px;
+    &.btn {
+      right: 50px;
+    }
   }
   .loading {
     position: absolute;

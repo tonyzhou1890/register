@@ -1,19 +1,19 @@
 <template>
   <v-layout wrap class="base-info-wrapper">
-    <EditBlock :loading="loading" :onEdit="onEdit">
-      <v-layout class="title" sm12 wrap v-show="!active">
+    <EditBlock :loading="loading" :onEdit="onEdit" buttonType="btn">
+      <v-layout class="title block-padding" sm12 wrap v-show="!active">
         <v-flex sm12>
           <h2>基本信息</h2>
         </v-flex>
       </v-layout>
 
-      <v-layout class="content" wrap>
+      <v-layout class="content block-padding" wrap>
         <v-layout wrap v-show="!active">
           <v-flex sm6 xs12>用户名：{{ data.nickname }}</v-flex>
           <v-flex sm6 xs12>性别：{{ data.gender === 1 ? '男' : '女' }}</v-flex>
           <v-flex sm6 xs12>出生日期：{{ data.birth }}</v-flex>
           <v-flex sm6 xs12>账号状态：{{ data.disabled === 1 ? '禁用' : '正常' }}</v-flex>
-          <v-flex sm6 xs12>上次登录：{{ data.last_login_time }}</v-flex>
+          <v-flex sm6 xs12>上次登录：{{ data.lastLoginTime }}</v-flex>
         </v-layout>
         <v-form lazy-validation ref="form" v-model="valid" v-if="active">
           <v-layout wrap>
@@ -123,7 +123,7 @@ const initForm = {
   birth: '',
   avatar: "",
   disabled: null,
-  last_login_time: ""
+  lastLoginTime: ""
 };
 
 export default {
@@ -174,7 +174,7 @@ export default {
         birth: dayjs(store.birth || null).format(
           "YYYY-MM-DD"),
         disabled: store.disabled,
-        last_login_time: dayjs(store.last_login_time || null).format(
+        lastLoginTime: dayjs(store.lastLoginTime || null).format(
           "YYYY-MM-DD HH:mm:ss"
         )
       };
@@ -246,10 +246,6 @@ export default {
 <style lang="less" scoped>
 .base-info-wrapper {
   padding-top: 50px;
-  .title,
-  .content {
-    padding: 10px 50px;
-  }
   .content {
     font-size: 20px;
     line-height: 2;

@@ -15,7 +15,11 @@ import './permission' // permission control
 
 const vuetifyOptions = {
   theme: {
-    primary: '#9C27B0'
+    themes: {
+      light: {
+        primary: '#9C27B0'
+      }
+    }
   },
   lang: {
     locales: { zhHans },

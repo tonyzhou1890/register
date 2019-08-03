@@ -4,11 +4,13 @@
       text
       small
       color="grey lighten-4"
+      @click="go('Profile')"
     >首页</v-btn>
     <v-btn
       text
       small
       color="grey lighten-4"
+      @click="go('Apps')"
     >应用管理</v-btn>
     <v-btn
       text
@@ -38,6 +40,9 @@ export default {
         .then(res => {
           this.$router.replace({ path: '/' })
         })
+    },
+    go(page) {
+      this.$router.push({ name: page })
     }
   }
  }

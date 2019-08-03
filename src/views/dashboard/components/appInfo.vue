@@ -1,13 +1,13 @@
 <template>
   <v-layout wrap class="app-info-wrapper">
-    <EditBlock :loading="loading" :onEdit="onEdit">
-      <v-layout class="title" sm12 wrap v-show="!active">
+    <EditBlock :loading="loading" :onEdit="onEdit" buttonType="btn">
+      <v-layout class="title block-padding" sm12 wrap v-show="!active">
         <v-flex sm12>
           <h2>订阅应用</h2>
         </v-flex>
       </v-layout>
 
-      <v-layout class="content" wrap>
+      <v-layout class="content block-padding" wrap>
         <!-- 已订阅应用 -->
         <v-layout wrap v-show="!active">
           <v-flex v-if="subApps.length === 0" class="pd-card no-subscribe" sm6 xs12>
@@ -20,6 +20,7 @@
           <v-flex
             v-for="(app, index) in subApps"
             :key="index"
+            v-show="!app.hidden"
             class="pd-card"
             sm6
             xs12
@@ -41,9 +42,9 @@
                 <span class="app-register-time-label">应用注册时间:</span>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <p v-on="on" class="app-register-time no-wrap">{{ app.register_time }}</p>
+                    <p v-on="on" class="app-register-time no-wrap">{{ app.registerTime }}</p>
                   </template>
-                  <span>{{ app.register_time }}</span>
+                  <span>{{ app.registerTime }}</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -67,6 +68,7 @@
           <v-flex
             v-for="(app, index) in allApps"
             :key="index"
+            v-show="!app.hidden"
             class="pd-card"
             sm6
             xs12
@@ -80,7 +82,7 @@
                   v-if="!app.subscribed"
                   color="primary"
                   class="app-card-btn"
-                  :disabled="app.accounts >= app.accounts_limit"
+                  :disabled="app.accounts >= app.accountsLimit"
                   :loading="appLoading && app.uuid === appUuid"
                   @click="changeSubscribed(app.uuid, true)"
                 >订阅</v-btn>
@@ -104,9 +106,9 @@
                 <span class="app-register-time-label">应用注册时间:</span>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
-                    <p v-on="on" class="app-register-time no-wrap">{{ app.register_time }}</p>
+                    <p v-on="on" class="app-register-time no-wrap">{{ app.registerTime }}</p>
                   </template>
-                  <span>{{ app.register_time }}</span>
+                  <span>{{ app.registerTime }}</span>
                 </v-tooltip>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -162,7 +164,7 @@ export default {
                 {
                   ...app,
                   icon: app.icon ? process.env.VUE_APP_STORE + app.icon : defaultAppIcon,
-                  register_time: dayjs(app.register_time || null).format('YYYY-MM-DD HH:mm:ss')
+                  registerTime: dayjs(app.registerTime || null).format('YYYY-MM-DD HH:mm:ss')
                 }
               )
             }
@@ -182,7 +184,7 @@ export default {
       apps.map((app, index) => {
         arr.push({...app})
         arr[index].icon = app.icon ? process.env.VUE_APP_STORE + app.icon : defaultAppIcon
-        arr[index].register_time = dayjs(app.register_time || null).format('YYYY-MM-DD HH:mm:ss')
+        arr[index].registerTime = dayjs(app.registerTime || null).format('YYYY-MM-DD HH:mm:ss')
         arr[index].subscribed = subscribedApps.includes(app.uuid) ? true : false
       })
       return arr
@@ -247,10 +249,6 @@ export default {
 @import url('~@/style/variables.less');
 .app-info-wrapper {
   padding-top: 50px;
-  .title,
-  .content {
-    padding: 10px 50px;
-  }
   .content {
     font-size: 20px;
     line-height: 2;
