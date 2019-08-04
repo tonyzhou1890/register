@@ -159,7 +159,7 @@ export default {
         const filterApps = []
         temp.map(item => {
           apps.map(app => {
-            if (app.uuid === item) {
+            if (app.uuid === item && !app.hidden) {
               filterApps.push(
                 {
                   ...app,
@@ -177,15 +177,17 @@ export default {
     },
     allApps() {
       const store = this.$store.state.user.raw;
-      const apps = this.$store.state.apps.apps
+      const apps = JSON.parse(JSON.stringify(this.$store.state.apps.apps))
       const defaultAppIcon = this.$store.state.app.defaultAppIcon
       let arr = []
       let subscribedApps = store.apps ? store.apps.split(',') : []
       apps.map((app, index) => {
-        arr.push({...app})
-        arr[index].icon = app.icon ? process.env.VUE_APP_STORE + app.icon : defaultAppIcon
-        arr[index].registerTime = dayjs(app.registerTime || null).format('YYYY-MM-DD HH:mm:ss')
-        arr[index].subscribed = subscribedApps.includes(app.uuid) ? true : false
+        if (!app.hidden) {
+          app.icon = app.icon ? process.env.VUE_APP_STORE + app.icon : defaultAppIcon
+          app.registerTime = dayjs(app.registerTime || null).format('YYYY-MM-DD HH:mm:ss')
+          app.subscribed = subscribedApps.includes(app.uuid) ? true : false
+          arr.push({...app})
+        }
       })
       return arr
     }
@@ -220,7 +222,6 @@ export default {
         apps = arr.join(',')
       }
       this.appUuid = uuid
-      console.log(uuid, apps)
       updateApps({
         app: uuid,
         apps,

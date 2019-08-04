@@ -59,7 +59,7 @@ export default {
         this.$store.dispatch('user/login', this.form)
           .then(() => {
             this.loading = false
-            this.$router.push({ name: 'profile' })
+            this.$router.push({ name: 'Profile' })
           })
           .catch(() => {
             this.loading = false

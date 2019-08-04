@@ -65,6 +65,14 @@ export const asyncRoutes = [
       roles: ['admin']
     }
   },
+  {
+    path: '/accounts',
+    component: () => import('@/views/accounts/index'),
+    name: 'Accounts',
+    meta: {
+      roles: ['admin']
+    }
+  },
   // 404 page must be placed at the end !!!
   {
     path: '*',

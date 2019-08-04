@@ -107,6 +107,9 @@ export default {
           return true
         }
       }
+    },
+    raw: {
+      default: undefined
     }
   },
   data() {
@@ -125,7 +128,7 @@ export default {
   },
   methods: {
     async onClick(action) {
-      const res = await this.onEdit(action)
+      const res = await this.onEdit(action, this.raw)
       if (res || res === undefined) {
         if (action === 'edit') {
           this.isActive = true

@@ -53,14 +53,14 @@ service.interceptors.response.use(
         // to re-login
         store.commit('app/TOGGLE_NOTIFY', { info: '请重新登录', show: true })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.errorMsg || 'Error'))
     } else {
       return res
     }
   },
   error => {
     console.log('err' + error) // for debug
-    store.commit('app/TOGGLE_NOTIFY', { info: error.message, show: true })
+    store.commit('app/TOGGLE_NOTIFY', { info: error.errorMsg, show: true })
     return Promise.reject(error)
   }
 )

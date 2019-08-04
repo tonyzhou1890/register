@@ -7,3 +7,21 @@ export function list() {
     method: 'post'
   })
 }
+
+// 注册应用
+export function create(data) {
+  return request({
+    url: '/register/apps/create',
+    method: 'post',
+    data
+  })
+}
+
+// 更新应用
+export function update(data) {
+  return request({
+    url: '/register/apps/update',
+    method: 'post',
+    data
+  })
+}

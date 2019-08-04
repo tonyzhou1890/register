@@ -15,7 +15,7 @@
           <v-flex sm6 xs12>账号状态：{{ data.disabled === 1 ? '禁用' : '正常' }}</v-flex>
           <v-flex sm6 xs12>上次登录：{{ data.lastLoginTime }}</v-flex>
         </v-layout>
-        <v-form lazy-validation ref="form" v-model="valid" v-if="active">
+        <v-form ref="form" v-model="valid" v-if="active">
           <v-layout wrap>
             <v-flex sm6 xs12>
               <v-text-field
@@ -183,6 +183,7 @@ export default {
   methods: {
     onEdit(status) {
       const store = this.$store.state.user.raw;
+      // 进入编辑
       if (status === "edit") {
         this.form = {...initForm}
         Object.keys(this.form).map(key => {
@@ -194,9 +195,11 @@ export default {
         )
         this.active = true;
       }
+      // 取消
       if (status === "cancel") {
         this.active = false;
       }
+      // 完成
       if (status === "done") {
         this.$refs.form.validate();
         if (this.valid) {
@@ -207,7 +210,7 @@ export default {
             arr.pop()
             avatarName = arr.join('.')
           }
-          update({
+          return update({
             ...this.form,
             uuid: this.$store.state.user.raw.uuid,
             pwd: this.form.pwd || undefined,
@@ -226,6 +229,10 @@ export default {
               this.loading = false
               this.active = false
               return true
+            })
+            .catch(e => {
+              this.loading = false
+              return false
             })
         } else {
           return false

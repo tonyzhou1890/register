@@ -93,3 +93,8 @@ export function isArray(arg) {
   }
   return Array.isArray(arg)
 }
+
+export function validNotEmpty(str) {
+  if (str === undefined || str === null) return false
+  return Boolean(String(str).trim())
+}

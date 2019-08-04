@@ -7,15 +7,18 @@
       @click="go('Profile')"
     >首页</v-btn>
     <v-btn
+      v-if="type === 2"
       text
       small
       color="grey lighten-4"
       @click="go('Apps')"
     >应用管理</v-btn>
     <v-btn
+      v-if="type === 2"
       text
       small
       color="grey lighten-4"
+      @click="go('Accounts')"
     >账户管理</v-btn>
     <v-btn
       text
@@ -32,6 +35,11 @@ export default {
   data() {
     return {
 
+    }
+  },
+  computed: {
+    type() {
+      return this.$store.state.user.raw.type
     }
   },
   methods: {

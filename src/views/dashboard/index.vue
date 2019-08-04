@@ -39,6 +39,9 @@ export default {
       return this._src || this.$store.state.user.raw.avatar ? process.env.VUE_APP_STORE + this.$store.state.user.raw.avatar : process.env.VUE_APP_STORE + '/images/avatar/default.jpg'
     }
   },
+  created() {
+    this.$store.dispatch('apps/getApps')
+  }
 }
 </script>
 
