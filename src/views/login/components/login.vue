@@ -59,7 +59,11 @@ export default {
         this.$store.dispatch('user/login', this.form)
           .then(() => {
             this.loading = false
-            this.$router.push({ name: 'Profile' })
+            if (this.$route.query.from) {
+              window.location.href = decodeURI(this.$route.query.from)
+            } else {
+              this.$router.push({ name: 'Profile' })
+            }
           })
           .catch(() => {
             this.loading = false

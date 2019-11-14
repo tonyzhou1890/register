@@ -168,6 +168,9 @@ export default {
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
+    if (this.$route.query.to === 'register') {
+      this.handleRotate()
+    }
   },
   mounted() {
     // if (this.loginForm.username === '') {
@@ -200,24 +203,6 @@ export default {
       }
       this.$nextTick(() => {
         this.$refs.password.focus()
-      })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
       })
     },
     getOtherQuery(query) {

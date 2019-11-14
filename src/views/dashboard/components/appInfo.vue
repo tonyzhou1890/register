@@ -82,7 +82,7 @@
                   v-if="!app.subscribed"
                   color="primary"
                   class="app-card-btn"
-                  :disabled="app.accounts >= app.accountsLimit"
+                  :disabled="app.accountsLimit !== 0 && app.accounts >= app.accountsLimit"
                   :loading="appLoading && app.uuid === appUuid"
                   @click="changeSubscribed(app.uuid, true)"
                 >订阅</v-btn>
