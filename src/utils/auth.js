@@ -16,7 +16,10 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token, getDomain(), '/')
+  return Cookies.set(TokenKey, token, {
+    domain: getDomain(),
+    path: '/'
+  })
 }
 
 export function removeToken() {
