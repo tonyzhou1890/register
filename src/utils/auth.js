@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+window.Cookies = Cookies
 
 const TokenKey = 'Admin-Token'
 
@@ -23,5 +24,8 @@ export function setToken(token) {
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return Cookies.remove(TokenKey, {
+    domain: getDomain(),
+    path: '/'
+  })
 }
