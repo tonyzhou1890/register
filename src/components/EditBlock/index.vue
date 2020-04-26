@@ -151,7 +151,7 @@ export default {
 @import url('~@/style/variables.less');
 .edit-block-wrapper {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   position: relative;
   &.active {
     border: 1px solid @primary;

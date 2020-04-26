@@ -150,13 +150,24 @@ export default {
   },
   methods: {
     onCreate() {
-      console.log('ccc')
+      if (this.editing && this.editingAppUuid) {
+        this.$store.commit('app/TOGGLE_NOTIFY', {
+          show: true,
+          color: 'info',
+          info: '有正在编辑的应用'
+        })
+        return false
+      }
       this.creating = true
+      this.editing = false
+      this.appInfo = Object.assign({}, initAppInfo)
+      this.editingAppUuid = null
       this.$nextTick(() => {
         this.$refs.addForm.$refs.editBlock.onClick('edit')
       })
     },
     onEnterEdit(raw) {
+      console.log(raw, this.creating)
       if (this.creating) {
         this.$store.commit('app/TOGGLE_NOTIFY', {
           show: true,
